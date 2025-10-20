@@ -1,0 +1,525 @@
+/* src/App.css (FINAL VERIFIED VERSION - CLEANED UP) */
+
+/* --- 1. Global Setup & Theme Variables --- */
+:root {
+  --bg-dark: #121212;
+  --bg-light: #1e1e1e;
+  --primary-blue: #2a2a3a;
+  --accent-pink: #e94560;
+  --accent-green: #32de84;
+  --text-light: #ffffff;
+  --text-grey: #a7a9be;
+}
+
+html, body, #root {
+  margin: 0; padding: 0; height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-dark); color: var(--text-light);
+}
+
+/* --- 2. Authentication Page Styles --- */
+.auth-container { display: flex; justify-content: center; align-items: center; height: 100%; padding: 20px; box-sizing: border-box; }
+.auth-box { width: 100%; max-width: 400px; background-color: var(--bg-light); padding: 40px 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); border: 1px solid var(--primary-blue); }
+.auth-box h2 { text-align: center; margin-bottom: 25px; color: var(--accent-green); font-size: 24px; }
+.auth-box input { width: 100%; padding: 12px; margin-bottom: 15px; background-color: var(--primary-blue); border: 1px solid var(--primary-blue); border-radius: 8px; color: var(--text-light); box-sizing: border-box; font-size: 16px; }
+.auth-box input::placeholder { color: var(--text-grey); }
+.auth-btn { width: 100%; padding: 12px; background: var(--accent-pink); border: none; border-radius: 8px; color: var(--text-light); font-weight: bold; cursor: pointer; font-size: 16px; transition: transform 0.2s; }
+.auth-btn:hover { transform: scale(1.02); }
+.auth-toggle { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-grey); }
+.auth-toggle span { color: var(--accent-green); font-weight: bold; cursor: pointer; }
+
+
+/* --- 3. Main App Layout Styles --- */
+.app-container { padding-bottom: 70px; }
+.app-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: var(--bg-light); border-bottom: 1px solid var(--primary-blue); }
+.app-header .app-title { color: var(--accent-pink); font-size: 24px; font-weight: 800; margin-bottom: 5px; }
+.app-header .welcome-player { font-size: 14px; color: var(--text-grey); display: block; }
+.app-header .welcome-text h1 { margin: 0; }
+.main-content { padding: 20px; }
+
+
+/* --- 4. Tournament Card Styles (FINAL) --- */
+.tournament-card { background-color: var(--bg-light); border-radius: 15px; padding: 20px; margin-bottom: 20px; border-left: 5px solid var(--primary-blue); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.card-date { font-size: 12px; color: var(--text-grey); margin: 10px 0 15px 0; text-align: center; }
+
+/* FIX: Card Header Flexbox Layout */
+.card-header { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.tourney-code { background-color: var(--accent-pink); color: white; padding: 4px 10px; font-size: 12px; font-weight: bold; border-radius: 5px; flex-shrink: 0; }
+.title-container { flex-grow: 1; text-align: center; }
+.title-container h3 { margin: 0; font-size: 18px; padding: 0 10px; }
+.card-header .mode-badge { background-color: var(--primary-blue); padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold; flex-shrink: 0; }
+
+/* FIX: Card Stats Flexbox Layout */
+.card-stats { display: flex; justify-content: space-between; align-items: center; padding: 0 10px; margin-bottom: 20px; }
+.stat h4 { margin: 0 0 5px 0; font-size: 16px; color: var(--accent-green); }
+.stat p { margin: 0; font-size: 12px; color: var(--text-grey); }
+.stat:first-child { text-align: left; }
+.stat:last-child { text-align: right; }
+
+.progress-bar { width: 100%; background-color: var(--primary-blue); border-radius: 5px; height: 8px; margin-bottom: 5px; overflow: hidden; }
+.progress { height: 100%; background: linear-gradient(90deg, var(--accent-pink), #f06a7f); border-radius: 5px; }
+.slot-details { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-grey); margin-bottom: 20px; }
+.card-actions { display: flex; }
+.btn-join { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; background-color: var(--accent-green); color: #000; font-size: 16px; transition: transform 0.2s; }
+.btn-join:hover { transform: scale(1.02); }
+
+
+/* --- 5. Join Tournament Page Styles --- */
+.join-page-container { padding: 10px; }
+.join-page-container h2 { text-align: center; color: var(--accent-green); margin-bottom: 25px; }
+.rules-section, .player-details-section { background-color: var(--bg-light); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+.rules-section h3, .player-details-section h3 { margin-top: 0; border-bottom: 1px solid var(--primary-blue); padding-bottom: 10px; }
+.rules-section p { color: var(--text-grey); line-height: 1.6; white-space: pre-wrap; }
+.join-form input { width: 100%; padding: 12px; margin-bottom: 15px; background-color: var(--primary-blue); border: 1px solid var(--primary-blue); border-radius: 8px; color: var(--text-light); box-sizing: border-box; font-size: 16px; }
+.agree-section { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.agree-section label { cursor: pointer; }
+.btn-final-join { width: 100%; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; background-color: var(--accent-green); color: #000; font-size: 16px; border: none; transition: opacity 0.2s; }
+.btn-final-join:disabled { background-color: var(--text-grey); cursor: not-allowed; opacity: 0.5; }
+
+
+/* --- 6. Profile Page & Menu Styles --- */
+.profile-container { padding: 10px; }
+.profile-menu { margin-top: 30px; background-color: var(--bg-light); border-radius: 10px; overflow: hidden; }
+.menu-item { display: flex; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--primary-blue); cursor: pointer; font-weight: 500; transition: background-color 0.2s; }
+.menu-item:hover { background-color: var(--primary-blue); }
+.menu-item.logout-item { color: var(--accent-pink); font-weight: bold; border-bottom: none; }
+
+
+/* --- 7. Bottom Navigation Bar Styles --- */
+.bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background-color: var(--bg-light); display: flex; justify-content: space-around; align-items: center; box-shadow: 0 -5px 15px rgba(0,0,0,0.3); border-top: 1px solid var(--primary-blue); }
+.nav-item { color: var(--text-grey); text-decoration: none; padding: 10px 20px; border-radius: 10px; transition: all 0.3s ease; }
+.nav-item.active { background-color: var(--accent-green); color: #000; }
+
+/* --- 8. Tournament Tab Styles --- */
+.tournament-tabs { display: flex; margin-bottom: 20px; background-color: var(--bg-light); border-radius: 10px; padding: 5px; border: 1px solid var(--primary-blue); }
+.tab-link { flex: 1; padding: 10px; background-color: transparent; border: none; color: var(--text-grey); font-weight: bold; font-size: 16px; cursor: pointer; border-radius: 8px; transition: all 0.3s ease; }
+.tab-link.active { background-color: var(--accent-pink); color: var(--text-light); box-shadow: 0 4px 10px rgba(233, 69, 96, 0.3); }
+
+.form-divider { border: none; border-top: 1px solid var(--primary-blue); margin: 10px 0 20px 0; }
+
+.btn-details { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; background-color: var(--primary-blue); color: var(--text-light); font-size: 16px; transition: background-color 0.2s; }
+.btn-details:hover { background-color: #3e3e5b; }
+.btn-details:disabled { background-color: var(--text-grey); opacity: 0.5; cursor: not-allowed; }
+
+.room-details { margin-top: 15px; padding: 15px; background-color: var(--primary-blue); border-radius: 8px; border: 1px solid var(--accent-green); }
+.room-details p { margin: 5px 0; }
+
+/* --- 9. Action Buttons & Player List Styles --- */
+.btn-view-players, .btn-results { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 16px; transition: background-color 0.2s; }
+.btn-view-players { background-color: #007bff; color: white; }
+.btn-results { background-color: #6c757d; color: white; }
+.btn-results:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* --- 10. Live Match Page & Player List Styles --- */
+.live-match-container { padding: 10px; }
+.live-match-container h2 { text-align: center; color: var(--accent-green); margin-bottom: 10px; }
+.match-status-badge { display: block; text-align: center; margin-bottom: 25px; color: var(--accent-pink); font-weight: bold; font-size: 18px; }
+
+.live-details-card { background-color: var(--bg-light); border-radius: 15px; padding: 15px; margin-bottom: 20px; border-left: 5px solid var(--accent-pink); }
+.live-details-card .card-stats { display: flex; justify-content: space-between; align-items: center; padding: 0 10px; margin: 0; }
+.live-details-card .stat h4 { font-size: 18px; margin-bottom: 0; }
+.live-rules-section { background-color: var(--primary-blue); padding: 20px; border-radius: 10px; margin-bottom: 20px; }
+.live-rules-section h3 { margin-top: 0; border-bottom: 1px solid var(--bg-light); padding-bottom: 10px; color: var(--accent-green); }
+.live-rules-section p { color: var(--text-grey); line-height: 1.5; margin-bottom: 0; white-space: pre-wrap; }
+
+.player-list-container { margin-top: 15px; padding: 15px; background-color: var(--primary-blue); border-radius: 8px; }
+.player-list-container h4 { margin: 0 0 10px 0; border-bottom: 1px solid var(--bg-light); padding-bottom: 10px; }
+.player-list { list-style-type: none; padding: 0; margin: 0; max-height: 200px; overflow-y: auto; }
+.player-list-item { display: flex; justify-content: space-between; padding: 8px 5px; border-radius: 4px; }
+.player-list-item:nth-child(odd) { background-color: var(--bg-light); }
+.player-list-item span { color: var(--text-grey); }
+
+/* --- 12. Results Page Styles --- */
+.results-container h2 { text-align: center; color: var(--accent-green); margin-bottom: 30px; }
+.winners-list { display: flex; flex-direction: column; gap: 10px; }
+.winner-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 10px; background-color: var(--bg-light); border: 1px solid var(--primary-blue); transition: all 0.2s; }
+.rank-badge { font-size: 20px; margin-right: 15px; width: 30px; text-align: center; }
+.winner-name { flex-grow: 1; font-size: 16px; }
+.prize-amount { font-weight: bold; color: var(--accent-green); }
+.winner-item.rank-1 { background-color: #3f2c00; border-color: #ffd700; transform: scale(1.02); }
+.results-details { background-color: var(--primary-blue); border-color: var(--accent-green); margin-bottom: 30px; }
+
+/* --- 14. Banner and Announcement Styles --- */
+.banner-slider { width: 100%; height: 120px; margin-bottom: 20px; border-radius: 10px; overflow: hidden; }
+.banner-slider img { width: 100%; height: 100%; object-fit: cover; }
+.announcement-bar { display: flex; align-items: center; background-color: var(--primary-blue); color: var(--text-light); padding: 8px 10px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; overflow: hidden; }
+.announcement-icon { font-size: 16px; margin-right: 10px; color: var(--accent-pink); flex-shrink: 0; }
+.announcement-bar marquee { white-space: nowrap; overflow: hidden; margin: 0; }
+
+/* --- 15. Countdown Timer Styles --- */
+.countdown-timer-bar { background-color: #ffc107; color: #333; padding: 8px; border-radius: 8px 8px 0 0; font-weight: bold; text-align: center; font-size: 14px; margin-bottom: -15px; position: relative; z-index: 10; }
+.countdown-timer-bar .live-now { color: red; }
+.countdown-timer-bar .starts-in span { margin-right: 5px; }
+
+/* --- 16. Profile Menu & Static Page Styles --- */
+.static-page-container { padding: 10px; }
+.static-page-container h2 { color: var(--accent-green); border-bottom: 1px solid var(--primary-blue); padding-bottom: 10px; }
+.static-page-container p { color: var(--text-grey); line-height: 1.7; }
+.edit-profile-container h2 { text-align: center; color: var(--accent-green); }
+.edit-profile-form { display: flex; flex-direction: column; gap: 15px; margin-top: 30px; }
+.edit-profile-form label { color: var(--text-grey); font-size: 14px; margin-bottom: -10px; }
+.btn-save-profile { width: 100%; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; background-color: var(--accent-green); color: #000; font-size: 16px; border: none; margin-top: 15px; }
+
+/* --- FINAL: My Contests/Registrations Page Styles --- */
+.my-contests-page h2 { text-align: center; color: var(--accent-green); margin-bottom: 30px; }
+.request-card { background-color: var(--bg-light); border-radius: 10px; padding: 20px; margin-bottom: 20px; border-left: 5px solid var(--primary-blue); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.request-card h3 { margin: 0 0 15px 0; border-bottom: 1px solid var(--primary-blue); padding-bottom: 10px; }
+.request-card p { margin: 8px 0; color: var(--text-grey); }
+.request-card p strong { color: var(--text-light); }
+.request-card [class^="status-"] { font-weight: bold; padding: 3px 8px; border-radius: 5px; }
+.status-pending { color: #f0ad4e; background-color: rgba(240, 173, 78, 0.1); }
+.status-confirmed { color: var(--accent-green); background-color: rgba(50, 222, 132, 0.1); }
+.confirmed-details { margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--primary-blue); }
+
+/* --- ADMIN PANEL STYLES --- */
+.admin-box { border-color: #ffd700; }
+.admin-box h2 { color: #ffd700; }
+.admin-container { display: flex; flex-direction: column; min-height: 100vh; background-color: #0d1117; color: #c9d1d9; }
+.admin-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background-color: #161b22; border-bottom: 1px solid #30363d; }
+.admin-header h1 { font-size: 22px; margin: 0; color: #e6edf3; }
+.admin-logout-btn { background-color: #db3d3d; color: white; padding: 8px 16px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+.admin-main { display: flex; flex-grow: 1; }
+.admin-nav { width: 250px; background-color: #161b22; padding: 20px 0; border-right: 1px solid #30363d; flex-shrink: 0; }
+.admin-nav-item { padding: 12px 20px; cursor: pointer; border-left: 3px solid transparent; transition: background-color 0.2s; font-weight: 500; color: var(--text-grey); }
+.admin-nav-item:hover { background-color: #0d1117; }
+.admin-nav-item.active { background-color: #0d1117; border-left-color: #238636; color: white; }
+.admin-content { flex-grow: 1; padding: 30px; }
+.admin-content h2 { margin-top: 0; color: var(--accent-green); }
+
+/* --- ADMIN: Manage Requests Styles --- */
+.requests-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+.requests-table th, .requests-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #30363d; }
+.requests-table thead tr { background-color: #161b22; }
+.requests-table th { font-weight: 600; color: #e6edf3; }
+.requests-table tbody tr:hover { background-color: #1c2128; }
+.payment-code { color: #ffd700; font-family: monospace; font-size: 16px; }
+.requests-table .btn-accept, .requests-table .btn-reject { padding: 6px 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-right: 10px; }
+.btn-accept { background-color: #238636; color: white; }
+.btn-reject { background-color: #db3d3d; color: white; }
+
+/* --- ADMIN: Details Modal Styles --- */
+.btn-view-details { background: none; border: none; color: #58a6ff; cursor: pointer; text-decoration: underline; font-size: 14px; }
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.modal-content { background-color: #161b22; padding: 25px; border-radius: 10px; width: 90%; max-width: 500px; box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5); border: 1px solid #30363d; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #30363d; padding-bottom: 15px; margin-bottom: 15px; }
+.modal-header h3 { margin: 0; color: var(--accent-green); }
+.close-button { background: none; border: none; color: var(--text-grey); font-size: 28px; cursor: pointer; }
+.details-list { list-style: none; padding: 0; margin: 0; }
+.details-list li { padding: 8px 0; color: var(--text-grey); }
+.details-list strong { color: var(--text-light); margin-right: 10px; }
+
+/* --- ADMIN: Tournament Management Styles --- */
+.btn-create-new { background-color: var(--accent-green); color: #0d1117; padding: 10px 15px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
+.create-tournament-form { background-color: #161b22; padding: 20px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #30363d; display: flex; flex-direction: column; gap: 15px; }
+.create-tournament-form h3 { margin: 0 0 10px 0; color: var(--accent-green); }
+.create-tournament-form input, .create-tournament-form select { width: 100%; padding: 10px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: var(--text-light); box-sizing: border-box; }
+.create-tournament-form button[type="submit"] { background-color: #238636; color: white; padding: 10px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+
+.admin-table { width: 100%; border-collapse: collapse; }
+.admin-table th, .admin-table td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #30363d; }
+.admin-table thead { background-color: #161b22; }
+.admin-table .btn-edit, .admin-table .btn-delete { padding: 5px 10px; border-radius: 5px; border: 1px solid #30363d; cursor: pointer; margin-right: 5px; }
+.btn-edit { background-color: #1f6feb; color: white; }
+.btn-delete { background-color: #8b2323; color: white; }
+
+/* --- ADMIN: Edit Tournament Modal Styles --- */
+.modal-body { display: flex; flex-direction: column; gap: 15px; }
+.modal-body label { font-size: 14px; font-weight: 600; color: var(--text-grey); margin-bottom: -10px; }
+.modal-body input, .modal-body select { width: 100%; padding: 10px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: var(--text-light); box-sizing: border-box; }
+.btn-save-changes { background-color: #238636; color: white; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; }
+
+/* --- ADMIN: Textarea Styles --- */
+.create-tournament-form textarea, .modal-body textarea { width: 100%; padding: 10px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: var(--text-light); box-sizing: border-box; font-family: inherit; resize: vertical; }
+
+/* src/App.css */
+/* --- ADMIN: App Settings Styles --- */
+
+.settings-section {
+    background-color: #161b22;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border: 1px solid #30363d;
+}
+
+.settings-section h3 {
+    margin-top: 0;
+    color: var(--accent-green);
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 10px;
+}
+.settings-section h4 {
+    margin-top: 25px;
+}
+
+.btn-save-settings {
+    background-color: #238636;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.add-banner-form {
+    display: flex;
+    gap: 10px;
+}
+.add-banner-form input {
+    flex-grow: 1;
+}
+.add-banner-form button {
+    background-color: #1f6feb;
+    color: white;
+    border: none;
+    padding: 0 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.banner-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+.banner-item {
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 10px;
+    text-align: center;
+}
+.banner-item img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+.btn-delete-banner {
+    width: 100%;
+    background-color: #8b2323;
+    color: white;
+    padding: 6px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* src/App.css */
+/* --- ADMIN: Verify Players Styles --- */
+.btn-verify {
+    background-color: #f0ad4e; /* Orange */
+    color: #0d1117;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none; /* Removed border */
+    cursor: pointer;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.btn-back {
+    background-color: #30363d;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.verify-table .uid-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}
+
+.verify-checkbox {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent-green);
+}
+
+.verify-table tbody tr.verified {
+    background-color: rgba(35, 134, 54, 0.2); /* Faint green background */
+}
+
+/* src/App.css */
+/* --- ADMIN: Timestamp Column Style --- */
+.request-time {
+    font-size: 12px;
+    color: var(--text-grey);
+    white-space: nowrap; /* Prevents the date from wrapping to a new line */
+}
+
+/* src/App.css */
+/* --- ADMIN: Bracket Management Styles --- */
+.btn-manage-bracket {
+    background-color: #6e40c9; /* Purple */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+    font-weight: bold;
+}
+
+.bracket-round {
+    margin-bottom: 30px;
+    background-color: #161b22;
+    padding: 15px;
+    border-radius: 8px;
+}
+.bracket-round h3 {
+    margin-top: 0;
+    color: var(--accent-green);
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 10px;
+}
+.bracket-match {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px dashed #30363d;
+}
+.bracket-match:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.match-teams {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+.match-teams .vs {
+    color: var(--accent-pink);
+    font-weight: bold;
+}
+.match-actions {
+    font-size: 14px;
+    color: var(--text-grey);
+}
+.match-actions button {
+    background-color: #238636;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+.winner-tag {
+    color: var(--accent-green);
+    font-weight: bold;
+}
+
+/* src/App.css */
+/* --- ADMIN: Bracket Room ID/Pass Inputs --- */
+.room-id-pass-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+.room-id-pass-inputs input {
+    flex-grow: 1;
+    padding: 8px;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: var(--text-light);
+}
+.room-id-pass-inputs button {
+    background-color: #1f6feb; /* Blue */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.status-tag.locked {
+    font-style: italic;
+    color: var(--text-grey);
+}
+
+/* src/App.css */
+/* --- USER: Bracket View Page Styles --- */
+.btn-view-bracket { /* Style for the new button */
+    flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold;
+    cursor: pointer; text-transform: uppercase; font-size: 16px;
+    background-color: #6e40c9; /* Purple */
+    color: white;
+}
+
+.bracket-view-container h2 { text-align: center; color: var(--accent-green); margin-bottom: 10px; }
+.user-bracket-round { margin-bottom: 25px; }
+.user-bracket-round h3 { color: var(--accent-pink); border-bottom: 1px solid var(--primary-blue); padding-bottom: 8px; margin-bottom: 15px; }
+
+.user-bracket-match { background-color: var(--bg-light); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--primary-blue); }
+.user-bracket-match h4 { margin: 0 0 10px 0; font-size: 14px; color: var(--text-grey); }
+.user-bracket-match .match-teams { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: bold; }
+.user-bracket-match .match-teams .vs { color: var(--accent-pink); font-size: 12px; }
+.user-bracket-match .match-teams .winner { color: var(--accent-green); } /* Highlight winner */
+.winner-text { color: var(--accent-green); font-weight: bold; margin-top: 10px; text-align: center; }
+.user-room-details { margin-top: 15px; padding: 10px; background-color: var(--primary-blue); border-radius: 5px; font-size: 14px; }
+.user-room-details p { margin: 5px 0; }
+
+/* src/App.css */
+/* --- USER: Bracket View Enhancements --- */
+
+/* Highlight the user's current match */
+.user-bracket-match.user-match {
+    border-left-color: var(--accent-green); /* Green border for user's match */
+    background-color: #222c3e; /* Slightly different background */
+}
+
+.details-pending {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--text-grey);
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* src/App.css */
+/* --- ADMIN: Bracket Management Styles --- */
+.btn-manage-bracket { background-color: #6e40c9; color: white; padding: 5px 10px; border-radius: 5px; border: none; cursor: pointer; margin-right: 5px; font-weight: bold; }
+.bracket-round { margin-bottom: 30px; background-color: #161b22; padding: 15px; border-radius: 8px; border: 1px solid #30363d; }
+.bracket-round h3 { margin-top: 0; color: var(--accent-green); border-bottom: 1px solid #30363d; padding-bottom: 10px; }
+.bracket-match { margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed #30363d; }
+.bracket-match:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.match-teams { display: flex; justify-content: space-around; align-items: center; font-size: 16px; margin-bottom: 15px; }
+.match-teams .vs { color: var(--accent-pink); font-weight: bold; }
+.room-id-pass-inputs { display: flex; gap: 10px; margin-bottom: 15px; align-items: center; }
+.room-id-pass-inputs input { flex-grow: 1; padding: 8px; background-color: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: var(--text-light); }
+.room-id-pass-inputs button { background-color: #1f6feb; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; }
+.match-actions { font-size: 14px; color: var(--text-grey); margin-top: 10px; }
+.match-actions button { background-color: #238636; color: white; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; margin-left: 10px; }
+.winner-tag { color: var(--accent-green); font-weight: bold; margin-top: 10px; }
+.status-tag.locked { font-style: italic; color: var(--text-grey); margin-top: 10px; }
+
+/* src/App.css */
+/* --- USER: Bracket View Page Styles --- */
+.btn-view-bracket { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 16px; background-color: #6e40c9; color: white; }
+.bracket-view-container h2 { text-align: center; color: var(--accent-green); margin-bottom: 10px; }
+.user-bracket-round { margin-bottom: 25px; }
+.user-bracket-round h3 { color: var(--accent-pink); border-bottom: 1px solid var(--primary-blue); padding-bottom: 8px; margin-bottom: 15px; }
+.user-bracket-match { background-color: var(--bg-light); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--primary-blue); }
+.user-bracket-match h4 { margin: 0 0 10px 0; font-size: 14px; color: var(--text-grey); }
+.user-bracket-match .match-teams { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: bold; }
+.user-bracket-match .match-teams .vs { color: var(--accent-pink); font-size: 12px; }
+.user-bracket-match .match-teams .winner { color: var(--accent-green); }
+.winner-text { color: var(--accent-green); font-weight: bold; margin-top: 10px; text-align: center; }
+.user-room-details { margin-top: 15px; padding: 10px; background-color: var(--primary-blue); border-radius: 5px; font-size: 14px; }
+.user-room-details p { margin: 5px 0; }
+.user-bracket-match.user-match { border-left-color: var(--accent-green); background-color: #222c3e; }
+.details-pending { font-size: 13px; font-style: italic; color: var(--text-grey); text-align: center; margin-top: 10px; }
