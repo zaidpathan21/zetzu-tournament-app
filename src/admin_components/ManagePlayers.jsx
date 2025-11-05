@@ -1,4 +1,4 @@
-// src/admin_components/ManagePlayers.jsx (Simplified - No Wallet)
+// src/admin_components/ManagePlayers.jsx (Updated with In-Game ID)
 import React, { useState, useEffect } from 'react';
 import { ref, onValue } from 'firebase/database';
 import { db } from '../config.js';
@@ -34,18 +34,28 @@ const ManagePlayers = () => {
                 <thead>
                     <tr>
                         <th>Name</th>
+                        <th>In-Game ID</th> {/* <-- NAYA COLUMN */}
                         <th>Email</th>
-                        {/* Actions column abhi ke liye khaali hai */}
-                        <th>Actions</th>
+                        <th>Contact Info</th>
                     </tr>
                 </thead>
                 <tbody>
                     {players.map(p => (
                         <tr key={p.id}>
                             <td>{p.name}</td>
+                            <td>{p.inGameId || 'N/A'}</td> {/* <-- NAYA DATA CELL */}
                             <td>{p.email}</td>
                             <td>
-                                {/* Yahan hum baad mein 'Ban User' jaisa button add kar sakte hain */}
+                                {p.whatsapp && (
+                                    <a href={`https://wa.me/${p.whatsapp}`} target="_blank" rel="noopener noreferrer" className="contact-link whatsapp">
+                                        WhatsApp
+                                    </a>
+                                )}
+                                {p.instagram && (
+                                    <a href={`https://instagram.com/${p.instagram}`} target="_blank" rel="noopener noreferrer" className="contact-link instagram">
+                                        Instagram
+                                    </a>
+                                )}
                             </td>
                         </tr>
                     ))}

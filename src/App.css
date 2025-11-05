@@ -523,3 +523,23 @@ html, body, #root {
 .user-room-details p { margin: 5px 0; }
 .user-bracket-match.user-match { border-left-color: var(--accent-green); background-color: #222c3e; }
 .details-pending { font-size: 13px; font-style: italic; color: var(--text-grey); text-align: center; margin-top: 10px; }
+
+/* src/App.css */
+/* --- ADMIN: Contact Link Styles --- */
+.contact-link {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 12px;
+    margin-right: 10px;
+    color: white;
+}
+.contact-link.whatsapp {
+    background-color: #25D366; /* WhatsApp Green */
+}
+.contact-link.instagram {
+    background: #d6249f; /* Instagram Pink */
+}
+

@@ -1,4 +1,4 @@
-// src/pages/ProfilePage.jsx (FINAL and Corrected)
+// src/pages/ProfilePage.jsx (FINAL - with Instagram Support Button)
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -7,6 +7,18 @@ import { auth } from '../config.js';
 const ProfilePage = () => {
   const { userData } = useAuth();
   const navigate = useNavigate();
+
+  // --- YEH NAYA FUNCTION HAI ---
+  const handleSupportClick = () => {
+    // --- YAHAN APNA INSTAGRAM USERNAME DAALEIN (bina @ ke) ---
+    const adminInstagramUsername = "zetzuop"; // Example: "zetzuop"
+    
+    // Yeh seedha aapke Instagram DMs ko kholega
+    const instagramUrl = `https://ig.me/m/${adminInstagramUsername}`;
+    
+    // Naye tab mein Instagram kholega
+    window.open(instagramUrl, '_blank');
+  };
 
   const handleLogout = () => {
     auth.signOut();
@@ -42,15 +54,18 @@ const ProfilePage = () => {
         <div className="menu-item" onClick={() => navigate('/terms')}>
           Terms & Conditions
         </div>
-        <div className="menu-item" onClick={() => alert('Help & Support feature coming soon!')}>
+        
+        {/* --- YEH BUTTON AB INSTAGRAM KHOLEGA --- */}
+        <div className="menu-item" onClick={handleSupportClick}>
           Help & Support
         </div>
+        
         <div className="menu-item logout-item" onClick={handleLogout}>
           Log Out
         </div>
       </div>
     </div>
   );
-}; // <-- This curly brace was likely missing in your file
+};
 
 export default ProfilePage;
