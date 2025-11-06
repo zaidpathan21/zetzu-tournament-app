@@ -1,8 +1,8 @@
-// src/admin_components/ManageTournaments.jsx (FINAL - with ALL features)
+// src/admin_components/ManageTournaments.jsx (Simple Edit Button Version)
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, set, push, update, remove } from 'firebase/database';
 import { db } from '../config.js';
-import VerifyPlayers from './VerifyPlayers';
+import VerifyPlayers from './VerifyPlayers'; // Yeh abhi bhi kaam aayega
 
 const ManageTournaments = () => {
     const [tournaments, setTournaments] = useState([]);
@@ -15,18 +15,19 @@ const ManageTournaments = () => {
     const [newTournament, setNewTournament] = useState({
         title: '', uniqueCode: '', gameMode: 'Classic', teamType: 'Solo',
         dateTime: '', prizePool: 0, entryFee: 0, totalSlots: 0,
-        bracketSize: 0, status: 'Upcoming', rules: ''
+        status: 'Upcoming', rules: ''
     });
 
     const [playerList, setPlayerList] = useState([]);
     const [selectedWinner, setSelectedWinner] = useState('');
 
-    const [viewMode, setViewMode] = useState('list');
+    // --- View Mode State (Verify Players ke liye) ---
+    const [viewMode, setViewMode] = useState('list'); // 'list' or 'verify'
     const [selectedTournament, setSelectedTournament] = useState(null);
 
     useEffect(() => {
         const tournamentsRef = ref(db, 'tournaments');
-        onValue(tournamentsRef, (snapshot) => {
+        const unsubscribe = onValue(tournamentsRef, (snapshot) => {
             const data = snapshot.val();
             const loadedTournaments = [];
             if (data) {
@@ -37,24 +38,20 @@ const ManageTournaments = () => {
             setTournaments(loadedTournaments.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime)));
             setLoading(false);
         });
+        return () => unsubscribe();
     }, []);
 
     const handleCreateInputChange = (e) => {
         const { name, value } = e.target;
-        let updatedTournament = { ...newTournament, [name]: value };
-        if (name === 'gameMode' && value === 'Clash Squad') {
-            updatedTournament.teamType = 'Squad';
-        }
-        setNewTournament(updatedTournament);
+        // Bracket ya Clash Squad se juda koi bhi special logic yahan nahi hai
+        setNewTournament(prevState => ({ ...prevState, [name]: value }));
     };
 
     const handleCreateTournament = async (e) => {
         e.preventDefault();
         if (!newTournament.title || !newTournament.uniqueCode || !newTournament.dateTime) {
-            alert('Title, Unique Code, and Date/Time are required.');
-            return;
+            alert('Title, Unique Code, and Date/Time are required.'); return;
         }
-
         const newTournamentRef = push(ref(db, 'tournaments'));
         let tournamentData = {
             title: newTournament.title,
@@ -67,24 +64,8 @@ const ManageTournaments = () => {
             totalSlots: Number(newTournament.totalSlots),
             status: 'Upcoming',
             rules: newTournament.rules
+            // Bracket ka koi data save nahi hoga
         };
-
-        if (tournamentData.gameMode === 'Clash Squad') {
-            if (!newTournament.bracketSize || newTournament.bracketSize === "0") {
-                alert("Please select a bracket size for Clash Squad tournaments.");
-                return;
-            }
-            tournamentData.bracket = { round1: {} };
-            const size = Number(newTournament.bracketSize);
-            const numMatches = size / 2;
-            for (let i = 1; i <= numMatches; i++) {
-                tournamentData.bracket.round1[`match${i}`] = {
-                    teams: { teamA_slot: (i*2)-1, teamB_slot: i*2 },
-                    status: 'Upcoming', winner: null
-                };
-            }
-        }
-
         try {
             await set(newTournamentRef, tournamentData);
             alert('Tournament created successfully!');
@@ -93,85 +74,59 @@ const ManageTournaments = () => {
             alert('Failed to create tournament.');
         }
     };
-
-    const openEditModal = (tournament) => {
-        setEditingTournament(tournament);
-        setIsEditModalOpen(true);
-        if (tournament.status === 'Complete' && tournament.players) {
-            setPlayerList(Object.values(tournament.players));
-        }
+    
+    const openEditModal = (t) => { 
+        setEditingTournament(t); 
+        setIsEditModalOpen(true); 
+        // Winner select karne ke liye players fetch karein
+        if (t.players) { 
+            setPlayerList(Object.values(t.players)); 
+        } 
     };
-
-    const closeEditModal = () => {
-        setIsEditModalOpen(false); setEditingTournament(null);
-        setPlayerList([]); setSelectedWinner('');
-    };
-
-    const handleEditInputChange = (e) => {
-        const { name, value } = e.target;
-        const updatedTournament = { ...editingTournament, [name]: value };
-        setEditingTournament(updatedTournament);
-        if (name === 'status' && value === 'Complete' && updatedTournament.players) {
-            setPlayerList(Object.values(updatedTournament.players));
-        } else {
-            setPlayerList([]);
-        }
-    };
-
-    const handleUpdateTournament = async (e) => {
-        e.preventDefault();
-        const tournamentRef = ref(db, `tournaments/${editingTournament.id}`);
-        try {
-            await update(tournamentRef, {
-                title: editingTournament.title, status: editingTournament.status,
-                rules: editingTournament.rules || "",
-                roomId: editingTournament.roomId || "", roomPass: editingTournament.roomPass || ""
-            });
-            alert('Tournament updated successfully!'); closeEditModal();
-        } catch (error) {
-            alert('Failed to update tournament.');
-        }
-    };
-
-    const handleDeclareWinner = async () => {
-        if (!selectedWinner) {
-            alert("Please select a winner."); return;
-        }
-        const winnerData = JSON.parse(selectedWinner);
-        const tournamentRef = ref(db, `tournaments/${editingTournament.id}`);
-        try {
-            await update(tournamentRef, {
-                status: 'Complete',
-                winners: [{ rank: 1, name: winnerData.teamName || winnerData.inGameName, prize: editingTournament.prizePool }]
-            });
-            alert(`Winner declared!`); closeEditModal();
-        } catch (error) {
-            alert("Failed to declare winner.");
-        }
+    const closeEditModal = () => { setIsEditModalOpen(false); setEditingTournament(null); setPlayerList([]); setSelectedWinner(''); };
+    const handleEditInputChange = (e) => { const { name, value } = e.target; const updated = { ...editingTournament, [name]: value }; setEditingTournament(updated); };
+    
+    const handleUpdateTournament = async (e) => { 
+        e.preventDefault(); 
+        const tRef = ref(db, `tournaments/${editingTournament.id}`); 
+        try { 
+            await update(tRef, { 
+                title: editingTournament.title, 
+                status: editingTournament.status, 
+                rules: editingTournament.rules || "", 
+                roomId: editingTournament.roomId || "", 
+                roomPass: editingTournament.roomPass || "" 
+            }); 
+            alert('Tournament updated!'); 
+            closeEditModal(); 
+        } catch (error) { alert('Failed to update.'); } 
     };
     
-    const handleDeleteTournament = async (tournamentId) => {
-        if (window.confirm("Are you sure you want to delete this tournament?")) {
-            await remove(ref(db, `tournaments/${tournamentId}`));
-            alert('Tournament deleted.');
-        }
+    const handleDeclareWinner = async () => { 
+        if (!selectedWinner) { alert("Please select a winner."); return; } 
+        const winnerData = JSON.parse(selectedWinner); 
+        const tRef = ref(db, `tournaments/${editingTournament.id}`); 
+        try { 
+            await update(tRef, { 
+                status: 'Complete', 
+                winners: [{ rank: 1, name: winnerData.teamName || winnerData.playerDetails.players.p1.ign, prize: editingTournament.prizePool }] 
+            }); 
+            alert(`Winner declared!`); 
+            closeEditModal(); 
+        } catch (error) { alert("Failed to declare winner."); } 
     };
     
-    const handleVerifyClick = (tournament) => {
-        setSelectedTournament(tournament);
-        setViewMode('verify');
-    };
-
+    const handleDeleteTournament = async (id) => { if (window.confirm("Sure?")) { await remove(ref(db, `tournaments/${id}`)); alert('Deleted.'); } };
+    const handleVerifyClick = (t) => { setSelectedTournament(t); setViewMode('verify'); };
+    
     if (loading) return <p>Loading tournaments...</p>;
+    if (viewMode === 'verify') return <VerifyPlayers tournament={selectedTournament} goBack={() => setViewMode('list')} />;
 
-    if (viewMode === 'verify') {
-        return <VerifyPlayers tournament={selectedTournament} goBack={() => setViewMode('list')} />;
-    }
-
+    // Bracket view ka logic hata diya gaya hai
+    
     return (
         <div className="manage-tournaments">
             <h2>Tournament Management</h2>
-            
             <button className="btn-create-new" onClick={() => setShowCreateForm(!showCreateForm)}>
                 {showCreateForm ? 'Cancel' : '+ Create New Tournament'}
             </button>
@@ -190,13 +145,7 @@ const ManageTournaments = () => {
                         <option value="Duo">Duo</option>
                         <option value="Squad">Squad</option>
                     </select>
-                    {newTournament.gameMode === 'Clash Squad' && (
-                        <select name="bracketSize" onChange={handleCreateInputChange} value={newTournament.bracketSize} required>
-                            <option value="">Select Bracket Size</option>
-                            <option value="4">4 Teams</option>
-                            <option value="8">8 Teams</option>
-                        </select>
-                    )}
+                    {/* Bracket size ka input hata diya gaya hai */}
                     <input name="dateTime" type="datetime-local" onChange={handleCreateInputChange} required />
                     <input name="prizePool" type="number" onChange={handleCreateInputChange} placeholder="Prize Pool" required />
                     <input name="entryFee" type="number" onChange={handleCreateInputChange} placeholder="Entry Fee" required />
@@ -227,7 +176,9 @@ const ManageTournaments = () => {
                             <td>{t.teamType}</td>
                             <td>{t.status}</td>
                             <td>
+                                {/* --- UPDATED: Hamesha "Edit" button dikhega --- */}
                                 <button className="btn-edit" onClick={() => openEditModal(t)}>Edit</button>
+                                
                                 {t.status === 'Live' && (
                                     <button className="btn-verify" onClick={() => handleVerifyClick(t)}>Verify</button>
                                 )}
@@ -238,7 +189,6 @@ const ManageTournaments = () => {
                 </tbody>
             </table>
             
-            {/* --- THIS MODAL WAS MISSING --- */}
             {isEditModalOpen && editingTournament && (
                 <div className="modal-overlay" onClick={closeEditModal}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -246,6 +196,7 @@ const ManageTournaments = () => {
                             <h3>Edit Tournament: {editingTournament.title}</h3>
                             <button className="close-button" onClick={closeEditModal}>&times;</button>
                         </div>
+                        {/* --- YEH PURANA SIMPLE EDIT MODAL HAI --- */}
                         <div className="modal-body">
                             <label>Title</label>
                             <input name="title" value={editingTournament.title} onChange={handleEditInputChange} />
@@ -275,7 +226,7 @@ const ManageTournaments = () => {
                                             <option value="">-- Select a Winner --</option>
                                             {playerList.map((player, index) => (
                                                 <option key={index} value={JSON.stringify(player)}>
-                                                    Slot #{player.slot} - {player.teamName || player.inGameName}
+                                                    Slot #{player.slot} - {player.teamName || player.playerDetails.players.p1.ign}
                                                 </option>
                                             ))}
                                         </select>

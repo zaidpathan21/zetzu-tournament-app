@@ -1,4 +1,4 @@
-// src/admin_components/ManageRequests.jsx (FINAL and VERIFIED Code)
+// src/admin_components/ManageRequests.jsx (FINAL - Verified)
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, update, runTransaction, get } from 'firebase/database';
 import { db } from '../config.js';
@@ -11,48 +11,32 @@ const ManageRequests = () => {
 
     useEffect(() => {
         const requestsRef = ref(db, 'joinRequests');
-        
-        // This is a real-time listener. As soon as a new request is added to Firebase,
-        // this function will automatically run again and update the list.
         const unsubscribe = onValue(requestsRef, (snapshot) => {
             const data = snapshot.val();
             const loadedRequests = [];
             if (data) {
                 for (let id in data) {
-                    // We only want to show requests that are waiting for action.
                     if (data[id].status === 'Pending') {
                         loadedRequests.push({ id, ...data[id] });
                     }
                 }
             }
-            // Sort by oldest first so you can approve them in order.
             setRequests(loadedRequests.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)));
             setLoading(false);
         });
-
-        // Cleanup the listener when the component is unmounted (very important for performance)
         return () => unsubscribe();
     }, []);
 
     const handleAccept = async (request) => {
         const tournamentRef = ref(db, `tournaments/${request.tournamentId}`);
         runTransaction(tournamentRef, (currentData) => {
-            if (!currentData) {
-                console.error("Transaction Error: Tournament data is null! ID used:", request.tournamentId);
-                return; 
-            }
+            if (!currentData) { console.error("Transaction Error: Tournament data is null!"); return; }
             const totalSlotsValue = currentData.totalSlots;
-            if (typeof totalSlotsValue !== 'number' || totalSlotsValue <= 0) {
-                 console.error("Transaction Error: totalSlots is invalid or missing!", totalSlotsValue);
-                 return; 
-            }
+            if (typeof totalSlotsValue !== 'number' || totalSlotsValue <= 0) { console.error("Transaction Error: totalSlots invalid!"); return; }
             const takenSlots = Object.values(currentData.players || {}).map(p => p.slot);
             const allPossibleSlots = Array.from({ length: totalSlotsValue }, (_, i) => i + 1);
             const availableSlots = allPossibleSlots.filter(slot => !takenSlots.includes(slot));
-            if (availableSlots.length === 0) {
-                console.warn("Transaction Aborting: No available slots.");
-                return; 
-            }
+            if (availableSlots.length === 0) { console.warn("Transaction Aborting: No slots."); return; }
             const randomIndex = Math.floor(Math.random() * availableSlots.length);
             const randomSlotNumber = availableSlots[randomIndex];
             if (!currentData.players) currentData.players = {};
@@ -65,19 +49,10 @@ const ManageRequests = () => {
                     const assignedSlot = finalTournamentData.players[request.userId].slot;
                     const requestRef = ref(db, `joinRequests/${request.id}`);
                     await update(requestRef, { status: 'Confirmed', slot: assignedSlot });
-                    alert(`Request accepted! User ${request.userName} assigned Slot #${assignedSlot}.`);
-                } else {
-                     console.error("Error post-commit: Player data missing.");
-                     alert("Acceptance committed, but couldn't confirm slot. Check DB.");
-                }
-            } else {
-                 console.error("Transaction Failed/Aborted. Committed: false");
-                alert("Failed to accept request. Tournament might be full or ID mismatch.");
-            }
-        }).catch((error) => {
-            console.error("Transaction failed with error: ", error);
-            alert("An error occurred during transaction.");
-        });
+                    alert(`Accepted! Slot #${assignedSlot}.`);
+                } else { alert("Couldn't confirm slot. Check DB."); }
+            } else { alert("Failed: Tournament full or ID mismatch."); }
+        }).catch((error) => { console.error("Transaction failed:", error); alert("Error."); });
     };
 
     const handleReject = async (request) => {
@@ -100,9 +75,7 @@ const ManageRequests = () => {
         setSelectedRequest(null);
     };
 
-    if (loading) {
-        return <p>Loading pending requests...</p>;
-    }
+    if (loading) { return <p>Loading pending requests...</p>; }
 
     return (
         <div className="manage-requests">
@@ -153,13 +126,18 @@ const ManageRequests = () => {
                             <ul className="details-list">
                                 <li><strong>Tournament:</strong> {selectedRequest.tournamentName}</li>
                                 <li><strong>User:</strong> {selectedRequest.userName}</li>
-                                <hr/>
                                 {selectedRequest.playerDetails.teamName && <li><strong>Team Name:</strong> {selectedRequest.playerDetails.teamName}</li>}
                                 {selectedRequest.playerDetails.leaderName && <li><strong>Leader Name:</strong> {selectedRequest.playerDetails.leaderName}</li>}
-                                {selectedRequest.playerDetails.inGameName && <li><strong>Player Name:</strong> {selectedRequest.playerDetails.inGameName}</li>}
-                                {selectedRequest.playerDetails.inGameUID && <li><strong>Player UID:</strong> {selectedRequest.playerDetails.inGameUID}</li>}
-                                {selectedRequest.playerDetails.uids && Object.entries(selectedRequest.playerDetails.uids).map(([key, value]) => (
-                                    value && <li key={key}><strong>UID ({key.toUpperCase()}):</strong> {value}</li>
+                                <hr/>
+                                
+                                {selectedRequest.playerDetails.players && 
+                                 Object.entries(selectedRequest.playerDetails.players).map(([key, player]) => (
+                                    player.ign && player.uid && (
+                                        <li key={key} className="player-detail-item">
+                                            <strong>{key.toUpperCase()}:</strong>
+                                            <span>{player.ign} ({player.uid})</span>
+                                        </li>
+                                    )
                                 ))}
                             </ul>
                         </div>
@@ -171,4 +149,3 @@ const ManageRequests = () => {
 };
 
 export default ManageRequests;
-

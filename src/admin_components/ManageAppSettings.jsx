@@ -1,10 +1,10 @@
-// src/admin_components/ManageAppSettings.jsx
+// src/admin_components/ManageAppSettings.jsx (Updated with YouTube Link)
 import React, { useState, useEffect } from 'react';
 import { ref, onValue, update, push, remove } from 'firebase/database';
 import { db } from '../config.js';
 
 const ManageAppSettings = () => {
-    const [settings, setSettings] = useState({ announcement: '', banners: {} });
+    const [settings, setSettings] = useState({ announcement: '', banners: {}, youtubeUrl: '' }); // youtubeUrl add kiya
     const [loading, setLoading] = useState(true);
     const [newBannerUrl, setNewBannerUrl] = useState('');
 
@@ -26,7 +26,8 @@ const ManageAppSettings = () => {
     const handleSaveSettings = async () => {
         try {
             await update(ref(db, 'appSettings'), {
-                announcement: settings.announcement
+                announcement: settings.announcement,
+                youtubeUrl: settings.youtubeUrl // Naya data save hoga
             });
             alert('Settings updated successfully!');
         } catch (error) {
@@ -69,15 +70,26 @@ const ManageAppSettings = () => {
             <h2>App Settings</h2>
 
             <div className="settings-section">
-                <h3>Announcement Text</h3>
+                <h3>Announcement & Links</h3>
+                
+                {/* --- NAYA INPUT FIELD --- */}
+                <label>YouTube Channel URL</label>
+                <input
+                    name="youtubeUrl"
+                    value={settings.youtubeUrl || ''}
+                    onChange={handleTextChange}
+                    placeholder="e.g., https://www.youtube.com/@yourchannel"
+                />
+                
+                <label>Announcement Text</label>
                 <textarea
                     name="announcement"
                     value={settings.announcement || ''}
                     onChange={handleTextChange}
                     rows="3"
-                    placeholder="Enter scrolling announcement text for the home page..."
+                    placeholder="Enter scrolling announcement text..."
                 />
-                <button className="btn-save-settings" onClick={handleSaveSettings}>Save Announcement</button>
+                <button className="btn-save-settings" onClick={handleSaveSettings}>Save Settings</button>
             </div>
 
             <div className="settings-section">

@@ -139,12 +139,93 @@ html, body, #root {
 .winner-item.rank-1 { background-color: #3f2c00; border-color: #ffd700; transform: scale(1.02); }
 .results-details { background-color: var(--primary-blue); border-color: var(--accent-green); margin-bottom: 30px; }
 
-/* --- 14. Banner and Announcement Styles --- */
-.banner-slider { width: 100%; height: 120px; margin-bottom: 20px; border-radius: 10px; overflow: hidden; }
-.banner-slider img { width: 100%; height: 100%; object-fit: cover; }
-.announcement-bar { display: flex; align-items: center; background-color: var(--primary-blue); color: var(--text-light); padding: 8px 10px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; overflow: hidden; }
-.announcement-icon { font-size: 16px; margin-right: 10px; color: var(--accent-pink); flex-shrink: 0; }
-.announcement-bar marquee { white-space: nowrap; overflow: hidden; margin: 0; }
+/* src/App.css */
+
+/* --- 14. Banner and Announcement Styles (FINAL FIX) --- */
+.banner-slider {
+  width: 100%;
+  height: 120px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.banner-slider img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Wrapper jo link ban jaata hai */
+.announcement-bar-wrapper {
+  text-decoration: none; /* Link se underline hatayega */
+  display: block;
+  margin-bottom: 20px;
+}
+
+.announcement-bar {
+  display: flex;
+  align-items: center;
+  background-color: var(--primary-blue);
+  color: var(--text-light); /* <-- YEH AAPKA TEXT COLOR FIX KAREGA */
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  overflow: hidden;
+  cursor: pointer; 
+  transition: background-color 0.2s;
+}
+.announcement-bar-wrapper[href]:hover .announcement-bar {
+  background-color: #3e3e5b;
+}
+
+/* Icons */
+.announcement-icons {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+.icon-megaphone {
+  font-size: 16px;
+  color: var(--accent-pink);
+}
+.live-indicator {
+  background-color: red;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 4px;
+  margin-left: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+/* --- YEH HAI SCROLLING ANIMATION KA FIX --- */
+.marquee-wrapper {
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.marquee-content {
+  display: inline-block; 
+  animation: scroll 20s linear infinite; /* Speed yahan se control hoti hai */
+}
+.marquee-content p {
+  display: inline-block; 
+  margin: 0;
+  padding-right: 3rem; 
+  color: var(--text-light); /* Ensure text color is correct */
+}
+
+/* Animation keyframes */
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+  70% { box-shadow: 0 0 0 8px rgba(255, 0, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+}
 
 /* --- 15. Countdown Timer Styles --- */
 .countdown-timer-bar { background-color: #ffc107; color: #333; padding: 8px; border-radius: 8px 8px 0 0; font-weight: bold; text-align: center; font-size: 14px; margin-bottom: -15px; position: relative; z-index: 10; }
@@ -543,3 +624,144 @@ html, body, #root {
     background: #d6249f; /* Instagram Pink */
 }
 
+/* src/App.css */
+/* --- ADMIN: Responsive (Mobile-First) Styles --- */
+
+/* Mobile Menu Button (by default chhipa rahega) */
+.admin-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+}
+.admin-nav-close-btn {
+    display: none; /* Desktop par chhipa rahega */
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 36px;
+    cursor: pointer;
+}
+
+.admin-nav-overlay {
+    display: none; /* Desktop par chhipa rahega */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1001;
+}
+
+/* --- Media Query: Jab screen 768px se chhoti ho (Mobile/Tablet) --- */
+@media (max-width: 768px) {
+    .admin-menu-btn {
+        display: block; /* Mobile par menu button dikhao */
+    }
+
+    .admin-main {
+        flex-direction: column; /* Content ko sidebar ke neeche le jao (zaroori nahi, hum slide-in use kar rahe) */
+    }
+
+    .admin-nav {
+        position: fixed; /* Sidebar ko screen par fix kar do */
+        left: 0;
+        top: 0;
+        height: 100vh; /* Poori height do */
+        width: 280px; /* Thodi zyada width do */
+        background-color: #161b22;
+        z-index: 1002; /* Overlay se upar */
+        transform: translateX(-100%); /* Screen se bahar (left mein) chhipa do */
+        transition: transform 0.3s ease-in-out;
+        padding-top: 60px; /* Close button ke liye jagah */
+    }
+
+    .admin-nav.open {
+        transform: translateX(0); /* Jab 'open' class lage, toh sidebar ko screen par le aao */
+        box-shadow: 5px 0 15px rgba(0,0,0,0.3);
+    }
+
+    .admin-nav-overlay.open {
+         display: block; /* Jab nav open ho, toh overlay dikhao */
+    }
+
+    .admin-nav-close-btn {
+        display: block; /* Mobile par close button dikhao */
+    }
+
+    .admin-content {
+        width: 100%; /* Content ko poori width do */
+        padding: 20px; /* Thodi padding kam kar do */
+        box-sizing: border-box; /* Padding ko width mein include karo */
+    }
+}
+
+/* src/App.css */
+/* --- Player Detail Form/List Styles --- */
+.join-form h5 {
+  color: var(--accent-green);
+  margin-top: 15px;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+.form-divider-light {
+  border: none;
+  border-top: 1px solid var(--primary-blue);
+  margin: 15px 0;
+}
+.player-detail-item {
+  display: flex;
+  justify-content: space-between;
+}
+.player-detail-item span {
+  color: var(--text-light);
+}
+.uid-list li {
+  margin-bottom: 5px;
+}
+
+/* src/App.css */
+/* --- ADMIN: App Settings Form Fix --- */
+
+.settings-section {
+    display: flex; /* Flexbox ka istemaal karein */
+    flex-direction: column; /* Sabko ek ke neeche ek (vertical) rakhein */
+    gap: 10px; /* Har item ke beech mein thoda gap dein */
+}
+
+/* Input aur textarea ko poori width dein */
+.settings-section input[type="text"],
+.settings-section textarea {
+    width: 100%;
+    padding: 10px;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: var(--text-light);
+    box-sizing: border-box; /* Padding ko width mein include karein */
+    font-family: inherit;
+}
+
+.settings-section textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.settings-section label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-grey);
+    margin-bottom: -5px; /* Label ko input ke thoda kareeb layein */
+}
+
+.btn-save-settings {
+    width: auto; /* Button ko poori width na dekar, content ke hisaab se rakhein */
+    align-self: flex-start; /* Button ko left mein align karein */
+    margin-top: 10px;
+}

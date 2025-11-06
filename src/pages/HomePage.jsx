@@ -58,10 +58,27 @@ const HomePage = () => {
 
       {/* Announcement Bar */}
       {appSettings.announcement && (
-        <div className="announcement-bar">
-          <span className="announcement-icon">📣</span>
-          <marquee>{appSettings.announcement}</marquee>
-        </div>
+        React.createElement(
+          appSettings.youtubeUrl ? 'a' : 'div',
+          {
+            href: appSettings.youtubeUrl || undefined,
+            target: appSettings.youtubeUrl ? '_blank' : undefined,
+            rel: appSettings.youtubeUrl ? 'noopener noreferrer' : undefined,
+            className: "announcement-bar-wrapper"
+          },
+          <div className="announcement-bar">
+            <div className="announcement-icons">
+              <span className="icon-megaphone">📣</span>
+              {appSettings.youtubeUrl && <span className="live-indicator">LIVE</span>}
+            </div>
+            <div className="marquee-wrapper">
+              <div className="marquee-content">
+                <p>{appSettings.announcement}</p>
+                <p>{appSettings.announcement}</p> {/* Duplicate for seamless loop */}
+              </div>
+            </div>
+          </div>
+        )
       )}
       
       <div className="tournament-tabs">
